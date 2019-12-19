@@ -32,3 +32,8 @@ Example 8: Black-list source address to drop all connections from 192.168.2.4
 ```
 firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.2.4" drop'
 ```
+
+
+# 注意以下两者的区别：
+--delete-service
+--remove-service
