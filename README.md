@@ -35,5 +35,5 @@ firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.2.4" dr
 
 
 # 注意以下两者的区别：
---delete-service
+--delete-service</br>
 --remove-service
