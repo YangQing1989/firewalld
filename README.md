@@ -37,3 +37,23 @@ firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.2.4" dr
 # 注意以下两者的区别：
 --delete-service</br>
 --remove-service
+
+# 创建ipset集合--失败的方法
+最初的想法是，使用firewall-cmd原生命令创建大量的ipset集合备用。
+但是下述脚本，执行了2天多，才执行了2/3。此方法淘汰。
+```
+#!/bin/bash
+directory=/tmp/country_block_$(date +"%Y%m%d%H%M%S")
+mkdir ${directory} && cd ${directory}
+wget -c https://www.ipdeny.com/ipblocks/data/countries/all-zones.tar.gz
+tar -zxf all-zones.tar.gz
+
+for name in `ls *.zone`
+do
+    firewall-cmd --permanent --new-ipset=${name} --type=hash:net
+    cat ${name} | while read line
+    do
+        firewall-cmd --permanent --ipset=${name} --add-entry=${line}
+    done
+done
+```
