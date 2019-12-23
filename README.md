@@ -34,7 +34,7 @@ firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.2.4" dr
 ```
 
 
-# 注意以下两者的区别：
+# 注意以下两者的区别
 --delete-service</br>
 --remove-service
 
@@ -58,16 +58,16 @@ do
 done
 ```
 # 改良版本
-但是上面的失败也是有价值的。
-发现在/etc/firewalld/ipsets目录下，生成的cn.zone.xml的文件都是有固定结构。
+但是上面的失败也是有价值的。</br>
+发现在/etc/firewalld/ipsets目录下，生成的cn.zone.xml的文件都是有固定结构。</br>
 <?xml version="1.0" encoding="utf-8"?>
 <ipset type="hash:net">
   <entry>1.0.1.0/24</entry>
   <entry>91.234.36.0/24</entry>
 </ipset>
-所以，换个思路，直接用脚本生成xml文件，然后放在该目录下。
-经过测试，该方法可行。
-进一步分析，也可以发现之前的脚本为什么这么慢。因为每次执行命令，都会生成一次xml.old文件。这个文件是原来的备份。
+所以，换个思路，直接用脚本生成xml文件，然后放在该目录下。</br>
+经过测试，该方法可行。</br>
+进一步分析，也可以发现之前的脚本为什么这么慢。因为每次执行命令，都会生成一次xml.old文件。这个文件是原来的备份。</br>
 如果可以选择不生成这个文件，我估计效率应该会快很多。
 
 ```
