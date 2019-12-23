@@ -68,7 +68,6 @@ done
 </ipset>
 ```
 所以，换个思路，直接用脚本生成xml文件，然后放在该目录下。</br>
-经过测试，该方法可行。</br>
 进一步分析，也可以发现之前的脚本为什么这么慢。因为每次执行命令，都会生成一次xml.old文件。这个文件是原来的备份。</br>
 如果可以选择不生成这个文件，我估计效率应该会快很多。
 
@@ -90,3 +89,21 @@ do
     echo '</ipset>' >> ${i}.xml
 done
 ```
+
+# 实战演练<只允许中国的IP访问>
+假设当前的zone是默认的public，没有改动过
+拷贝cn.zone.xml文件到/etc/firewalld/ipsets目录
+```
+firewall-cmd --permanent --add-rich-rule 'rule family="ipv4" source ipset="cn.zone" port port=22 protocol=tcp accept'
+firewall-cmd --reload
+firewall-cmd --remove-service=ssh
+```
+换个IP重新登录(如果之前是--complete-reload就不需要更换IP)。如果可以正常登录，那就没问题，可以改为永久生效。
+（上面的操作是为了不把自己锁在外面）
+```
+firewall-cmd --permanent --remove-service=ssh
+```
+
+**操作后验证**
+查看系统日志，可以发现原来有各个国家的IP一直在尝试非法访问，现在应该只剩国内的IP了。
+tail -f /var/log/secure | egrep -o '(([0-1]?[0-9]{0,2}|([2]([0-4][0-9]|[5][0-5])))\.){3}([0-1]?[0-9]{0,2}|([2]([0-4][0-9]|[5][0-5])))'
