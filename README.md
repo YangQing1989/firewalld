@@ -91,14 +91,14 @@ done
 ```
 
 # 实战演练<只允许中国的IP访问>
-假设当前的zone是默认的public，没有改动过
+假设当前的zone是默认的public，没有改动过</br>
 拷贝cn.zone.xml文件到/etc/firewalld/ipsets目录
 ```
 firewall-cmd --permanent --add-rich-rule 'rule family="ipv4" source ipset="cn.zone" port port=22 protocol=tcp accept'
 firewall-cmd --reload
 firewall-cmd --remove-service=ssh
 ```
-换个IP重新登录(如果之前是--complete-reload就不需要更换IP)。如果可以正常登录，那就没问题，可以改为永久生效。
+换个IP重新登录(如果之前是--complete-reload就不需要更换IP)。如果可以正常登录，那就没问题，可以改为永久生效。</br>
 （上面的操作是为了不把自己锁在外面）
 ```
 firewall-cmd --permanent --remove-service=ssh
