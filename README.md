@@ -57,3 +57,34 @@ do
     done
 done
 ```
+# 改良版本
+但是上面的失败也是有价值的。
+发现在/etc/firewalld/ipsets目录下，生成的cn.zone.xml的文件都是有固定结构。
+<?xml version="1.0" encoding="utf-8"?>
+<ipset type="hash:net">
+  <entry>1.0.1.0/24</entry>
+  <entry>91.234.36.0/24</entry>
+</ipset>
+所以，换个思路，直接用脚本生成xml文件，然后放在该目录下。
+经过测试，该方法可行。
+进一步分析，也可以发现之前的脚本为什么这么慢。因为每次执行命令，都会生成一次xml.old文件。这个文件是原来的备份。
+如果可以选择不生成这个文件，我估计效率应该会快很多。
+
+```
+#!/bin/bash
+directory=/tmp/country_block_$(date +"%Y%m%d%H%M%S")
+mkdir ${directory} && cd ${directory}
+wget -c https://www.ipdeny.com/ipblocks/data/countries/all-zones.tar.gz
+tar -zxf all-zones.tar.gz
+
+for i in `ls *.zone`
+do
+    echo '<?xml version="1.0" encoding="utf-8"?>' >> ${i}.xml
+    echo '<ipset type="hash:net">' >> ${i}.xml
+    cat ${i} | while read line
+    do
+        echo "  <entry>${line}</entry>" >> ${i}.xml
+    done
+    echo '</ipset>' >> ${i}.xml
+done
+```
