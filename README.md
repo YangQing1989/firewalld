@@ -109,3 +109,15 @@ firewall-cmd --permanent --remove-service=ssh
 ```
 tail -f /var/log/secure | egrep -o '(([0-1]?[0-9]{0,2}|([2]([0-4][0-9]|[5][0-5])))\.){3}([0-1]?[0-9]{0,2}|([2]([0-4][0-9]|[5][0-5])))'
 ```
+
+# 写在最后
+除了https\://www.ipdeny.com这个网站，https\://iptoasn.com这个网站的数据源质量可能更好一点。
+但是需要借助于netaddr这个py库处理下，把IP段转换成CIDR格式，降低ipset的元素数量。
+```
+startip = '208.130.29.30'
+endip = '208.130.29.35'
+cidrs = netaddr.iprange_to_cidrs(startip, endip)
+for k, v in enumerate(cidrs):
+    iplist = v
+    print iplist
+```
