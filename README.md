@@ -39,7 +39,7 @@ firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.2.4" dr
 --remove-service
 
 # 创建ipset集合--失败的方法
-最初的想法是，使用firewall-cmd原生命令创建大量的ipset集合备用。
+最初的想法是，使用firewall-cmd原生命令创建大量的ipset集合备用。  
 但是下述脚本，执行了2天多，才执行了2/3。此方法淘汰。
 ```
 #!/bin/bash
