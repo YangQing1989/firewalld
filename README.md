@@ -91,7 +91,7 @@ done
 ```
 
 # 实战演练<只允许中国的IP访问>--白名单
-假设当前的zone是默认的public，没有改动过</br>。
+假设当前的zone是默认的public，没有改动过。</br>
 拷贝cn.zone.xml文件到/etc/firewalld/ipsets目录。
 ```
 firewall-cmd --permanent --add-rich-rule 'rule family="ipv4" source ipset="cn.zone" port port=22 protocol=tcp accept'
