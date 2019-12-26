@@ -141,6 +141,7 @@ maxelem的值必须大于ipset集合元素的数量。如果没有这行，firew
 ```
 Error: COMMAND_FAILED: '/usr/sbin/ipset restore' failed: ipset v7.1: Error in line 65539: Hash is full, cannot add more elements
 ```
+[已经反馈此问题给官方去优化](https://github.com/firewalld/firewalld/issues/558)
 
 # 写在最后
 除了 https\:\/\/www\.ipdeny\.com 这个网站，https\:\/\/iptoasn\.com 这个网站的数据源质量可能更好一点。</br>
