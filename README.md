@@ -135,9 +135,9 @@ firewall-cmd --reload
 ```
 上述脚本增加了一行：
 ```
-echo '<ipset type="hash:net">' >> all_countries_exclude_cn.xml
+echo '  <option name="maxelem" value="300000"/>' >> all_countries_exclude_cn.xml
 ```
-如果没有这行，firewall-cmd --reload以后会报错
+maxelem的值必须大于ipset集合元素的数量。如果没有这行，firewall-cmd --reload以后会报错
 ```
 Error: COMMAND_FAILED: '/usr/sbin/ipset restore' failed: ipset v7.1: Error in line 65539: Hash is full, cannot add more elements
 ```
