@@ -91,8 +91,8 @@ done
 ```
 
 # 实战演练<只允许中国的IP访问>--白名单
-假设当前的zone是默认的public，没有改动过</br>
-拷贝cn.zone.xml文件到/etc/firewalld/ipsets目录
+假设当前的zone是默认的public，没有改动过</br>。
+拷贝cn.zone.xml文件到/etc/firewalld/ipsets目录。
 ```
 firewall-cmd --permanent --add-rich-rule 'rule family="ipv4" source ipset="cn.zone" port port=22 protocol=tcp accept'
 firewall-cmd --reload
@@ -144,7 +144,7 @@ Error: COMMAND_FAILED: '/usr/sbin/ipset restore' failed: ipset v7.1: Error in li
 
 # 写在最后
 除了 https\:\/\/www\.ipdeny\.com 这个网站，https\:\/\/iptoasn\.com 这个网站的数据源质量可能更好一点。</br>
-但是需要借助于netaddr这个py库处理下，把IP段转换成CIDR格式，降低ipset的元素数量。
+但是需要借助于netaddr这个py库处理下，把IP段转换成CIDR格式。
 ```
 startip = '208.130.29.30'
 endip = '208.130.29.35'
