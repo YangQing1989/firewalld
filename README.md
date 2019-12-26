@@ -90,7 +90,7 @@ do
 done
 ```
 
-# 实战演练<只允许中国的IP访问>
+# 实战演练<只允许中国的IP访问>--白名单
 假设当前的zone是默认的public，没有改动过</br>
 拷贝cn.zone.xml文件到/etc/firewalld/ipsets目录
 ```
@@ -108,6 +108,38 @@ firewall-cmd --permanent --remove-service=ssh
 查看系统日志，可以发现原来有各个国家的IP一直在尝试非法访问，现在应该只剩国内的IP了。</br>
 ```
 tail -f /var/log/secure | egrep -o '(([0-1]?[0-9]{0,2}|([2]([0-4][0-9]|[5][0-5])))\.){3}([0-1]?[0-9]{0,2}|([2]([0-4][0-9]|[5][0-5])))'
+```
+# 实战演练<只允许中国的IP访问>--黑名单
+```
+#!/bin/bash
+directory=/tmp/country_block_$(date +"%Y%m%d%H%M%S")
+mkdir ${directory} && cd ${directory}
+wget -c https://www.ipdeny.com/ipblocks/data/countries/all-zones.tar.gz
+tar -zxf all-zones.tar.gz
+
+echo '<?xml version="1.0" encoding="utf-8"?>' >> all_countries_exclude_cn.xml
+echo '<ipset type="hash:net">' >> all_countries_exclude_cn.xml
+echo '  <option name="maxelem" value="300000"/>' >> all_countries_exclude_cn.xml
+for i in `ls *.zone | grep -v cn.zone`
+do
+    cat ${i} | while read line
+    do
+        echo "  <entry>${line}</entry>" >> all_countries_exclude_cn.xml
+    done
+done
+echo '</ipset>' >> all_countries_exclude_cn.xml
+
+firewall-cmd --permanent --new-ipset-from-file=all_countries_exclude_cn.xml --name=all_countries_exclude_cn
+firewall-cmd --permanent --add-rich-rule 'rule family="ipv4" source ipset="all_countries_exclude_cn" port port=22 protocol=tcp drop'
+firewall-cmd --reload
+```
+上述脚本增加了一行：
+```
+echo '<ipset type="hash:net">' >> all_countries_exclude_cn.xml
+```
+如果没有这行，firewall-cmd --reload以后会报错
+```
+Error: COMMAND_FAILED: '/usr/sbin/ipset restore' failed: ipset v7.1: Error in line 65539: Hash is full, cannot add more elements
 ```
 
 # 写在最后
