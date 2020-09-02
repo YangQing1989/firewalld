@@ -1,0 +1,4 @@
+需要开放以下三个服务
+firewall-cmd --add-service=nfs3 --permanent
+firewall-cmd --add-service=rpc-bind --permanent
+firewall-cmd --add-service=mountd --permanent
